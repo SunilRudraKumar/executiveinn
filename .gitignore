@@ -1,0 +1,17 @@
+.DS_Store
+node_modules/
+dist/
+.env
+.env.*
+*.local
+.vscode/
+.idea/
+*.log
+coverage/
+.tmp/
+.vercel
+.svelte-kit/
+.next/
+.cache/
+.bun/
+bun.lockb

@@ -1,0 +1,57 @@
+{
+  "legend": {
+    "NSQ": "Non-Smoking Queen",
+    "SQ": "Smoking Queen",
+    "NSQQ": "Non-Smoking Queen/Queen",
+    "NSK": "Non-Smoking King",
+    "SK": "Smoking King"
+  },
+  "floors": [
+    {
+      "floor": 1,
+      "rooms": [
+        {"number": 101, "type": "NSQ"},
+        {"number": 103, "type": "NSQ"},
+        {"number": 105, "type": "SQ"},
+        {"number": 107, "type": "SQ"},
+        {"number": 108, "type": "NSQ"},
+        {"number": 109, "type": "SQ"},
+        {"number": 110, "type": "NSQ"},
+        {"number": 111, "type": "SQ"},
+        {"number": 112, "type": "NSQ"},
+        {"number": 114, "type": "NSQ"},
+        {"number": 115, "type": "NSQ"},
+        {"number": 116, "type": "NSK"},
+        {"number": 117, "type": "NSQ"},
+        {"number": 118, "type": "NSK"},
+        {"number": 119, "type": "NSQQ"},
+        {"number": 120, "type": "NSQ"},
+        {"number": 121, "type": "NSQ"}
+      ]
+    },
+    {
+      "floor": 2,
+      "rooms": [
+        {"number": 201, "type": "SQ"},
+        {"number": 202, "type": "NSQ"},
+        {"number": 203, "type": "NSK"},
+        {"number": 204, "type": "NSQQ"},
+        {"number": 206, "type": "SQ"},
+        {"number": 207, "type": "NSK"},
+        {"number": 208, "type": "SQ"},
+        {"number": 209, "type": "SQ"},
+        {"number": 210, "type": "NSK"},
+        {"number": 211, "type": "SQ"},
+        {"number": 213, "type": "NSQ"},
+        {"number": 214, "type": "NSQ"},
+        {"number": 215, "type": "SQ"},
+        {"number": 216, "type": "NSQQ"},
+        {"number": 217, "type": "SK"},
+        {"number": 218, "type": "NSQQ"},
+        {"number": 219, "type": "SQ"},
+        {"number": 220, "type": "NSQ"},
+        {"number": 221, "type": "NSQ"}
+      ]
+    }
+  ]
+}
