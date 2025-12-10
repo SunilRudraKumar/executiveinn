@@ -1,4 +1,3 @@
-```
 import { Helmet } from "react-helmet-async";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -13,6 +12,12 @@ import { Wifi, Car, Wind, Coffee, MapPin, Star, ChevronRight } from "lucide-reac
 import heroImage from "@/assets/hero-exterior.jpg";
 import { Skeleton } from "@/components/ui/skeleton";
 import { isSupabaseConfigured } from "@/lib/supabaseClient";
+import {
+  HOTEL_ADDRESS_LINE_1,
+  HOTEL_CITY,
+  HOTEL_REGION,
+  HOTEL_POSTAL
+} from "@/lib/constants";
 
 const Index = () => {
   const { data: roomTypesData, isLoading: roomsLoading } = useRoomTypes();
