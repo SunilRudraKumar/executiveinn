@@ -61,7 +61,7 @@ Deno.serve(async (req) => {
                     'Authorization': `Bearer ${RESEND_API_KEY}`
                 },
                 body: JSON.stringify({
-                    from: 'Executive Inn Booking <onboarding@resend.dev>',
+                    from: 'Executive Inn Booking <reservations@executiveinn.us>',
                     to: ['executiveinn1@gmail.com'],
                     subject: `New Booking: ${guest.firstName} ${guest.lastName}`,
                     html: adminEmailHtml
@@ -79,7 +79,7 @@ Deno.serve(async (req) => {
                     'Authorization': `Bearer ${RESEND_API_KEY}`
                 },
                 body: JSON.stringify({
-                    from: 'Executive Inn <onboarding@resend.dev>',
+                    from: 'Executive Inn <reservations@executiveinn.us>',
                     to: [guest.email],
                     subject: `Booking Confirmation - Executive Inn`,
                     html: guestEmailHtml
