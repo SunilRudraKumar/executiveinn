@@ -1,3 +1,4 @@
+```
 import { Helmet } from "react-helmet-async";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -8,7 +9,7 @@ import { getRoomTypes } from "@/lib/roomUtils";
 import { useRoomTypes, useHeroImage } from "@/hooks/useRoomTypes";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Wifi, Car, Wind, Coffee, MapPin, Star } from "lucide-react";
+import { Wifi, Car, Wind, Coffee, MapPin, Star, ChevronRight } from "lucide-react";
 import heroImage from "@/assets/hero-exterior.jpg";
 import { Skeleton } from "@/components/ui/skeleton";
 import { isSupabaseConfigured } from "@/lib/supabaseClient";
@@ -62,7 +63,7 @@ const Index = () => {
                   Rest Easy in Locust Grove
                 </h1>
                 <p className="text-xl lg:text-2xl text-primary-foreground/90 mb-8">
-                  Clean, comfortable rooms at exceptional value. Your home away from home 
+                  Clean, comfortable rooms at exceptional value. Your home away from home
                   in Locust Grove, Georgia.
                 </p>
                 <Link to="/book">
@@ -108,7 +109,7 @@ const Index = () => {
                   Rooms for Every Traveler
                 </h2>
                 <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                  From cozy queen rooms to spacious double queens, find the perfect accommodation 
+                  From cozy queen rooms to spacious double queens, find the perfect accommodation
                   for your stay in Locust Grove.
                 </p>
               </div>
@@ -151,15 +152,17 @@ const Index = () => {
                     Close to What Matters
                   </h2>
                   <p className="text-lg text-muted-foreground mb-6">
-                    Conveniently located in Locust Grove, Georgia, Executive Inn puts you 
+                    Conveniently located in Locust Grove, Georgia, Executive Inn puts you
                     within easy reach of local attractions, dining, and major highways.
                   </p>
                   <div className="space-y-4">
                     <div className="flex items-start gap-3">
                       <MapPin className="h-5 w-5 text-accent mt-1" />
                       <div>
-                        <p className="font-medium">4881 Bill Gardner Parkway</p>
-                        <p className="text-sm text-muted-foreground">Locust Grove, GA 30248</p>
+                        <p className="font-medium">{HOTEL_ADDRESS_LINE_1}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {HOTEL_CITY}, {HOTEL_REGION} {HOTEL_POSTAL}
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">

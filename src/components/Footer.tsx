@@ -1,6 +1,14 @@
 import { Link } from "react-router-dom";
 import { MapPin, Phone, Mail } from "lucide-react";
-import { HOTEL_EMAIL, HOTEL_PHONE_DISPLAY, HOTEL_PHONE_E164 } from "@/lib/constants";
+import {
+  HOTEL_EMAIL,
+  HOTEL_PHONE_DISPLAY,
+  HOTEL_PHONE_E164,
+  HOTEL_ADDRESS_LINE_1,
+  HOTEL_CITY,
+  HOTEL_REGION,
+  HOTEL_POSTAL
+} from "@/lib/constants";
 
 export function Footer() {
   return (
@@ -45,8 +53,8 @@ export function Footer() {
               <div className="flex items-start gap-2">
                 <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0" />
                 <span>
-                  4881 Bill Gardner Parkway<br />
-                  Locust Grove, GA 30248
+                  {HOTEL_ADDRESS_LINE_1}<br />
+                  {HOTEL_CITY}, {HOTEL_REGION} {HOTEL_POSTAL}
                 </span>
               </div>
               <div className="flex items-center gap-2">

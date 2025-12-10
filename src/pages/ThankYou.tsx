@@ -4,7 +4,15 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, MapPin, Phone, Mail } from "lucide-react";
-import { HOTEL_EMAIL, HOTEL_PHONE_DISPLAY, HOTEL_PHONE_E164 } from "@/lib/constants";
+import {
+  HOTEL_EMAIL,
+  HOTEL_PHONE_DISPLAY,
+  HOTEL_PHONE_E164,
+  HOTEL_ADDRESS_LINE_1,
+  HOTEL_CITY,
+  HOTEL_REGION,
+  HOTEL_POSTAL
+} from "@/lib/constants";
 
 const ThankYou = () => {
   const [searchParams] = useSearchParams();
@@ -80,8 +88,8 @@ const ThankYou = () => {
                     <div className="flex items-center gap-3">
                       <MapPin className="h-5 w-5 text-accent flex-shrink-0" />
                       <div className="text-sm">
-                        <p>4881 Bill Gardner Parkway</p>
-                        <p className="text-muted-foreground">Locust Grove, GA 30248</p>
+                        <p>{HOTEL_ADDRESS_LINE_1}</p>
+                        <p className="text-muted-foreground">{HOTEL_CITY}, {HOTEL_REGION} {HOTEL_POSTAL}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
