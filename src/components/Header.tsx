@@ -9,7 +9,7 @@ const navigation = [
   { name: "Home", href: "/" },
   { name: "Rooms", href: "/rooms" },
   { name: "Amenities", href: "/amenities" },
-  { name: "Gallery", href: "/gallery" },
+  // { name: "Gallery", href: "/gallery" },
   { name: "Location", href: "/location" },
   { name: "Policies", href: "/policies" },
   { name: "Contact", href: "/contact" },
@@ -27,7 +27,7 @@ export function Header() {
             <span className="text-2xl font-serif font-bold text-primary">Executive Inn</span>
           </Link>
         </div>
-        
+
         <div className="flex lg:hidden gap-2">
           <a href={`tel:${HOTEL_PHONE_E164}`} className="text-primary">
             <Phone className="h-6 w-6" aria-label="Call Executive Inn" />
@@ -41,7 +41,7 @@ export function Header() {
             {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
-        
+
         <div className="hidden lg:flex lg:gap-x-8">
           {navigation.map((item) => (
             <Link
@@ -56,7 +56,7 @@ export function Header() {
             </Link>
           ))}
         </div>
-        
+
         <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-4 lg:items-center">
           <a href={`tel:${HOTEL_PHONE_E164}`} className="flex items-center gap-2 text-sm font-medium text-foreground hover:text-accent transition-colors">
             <Phone className="h-4 w-4" />
@@ -69,7 +69,7 @@ export function Header() {
           </Link>
         </div>
       </nav>
-      
+
       {/* Mobile menu */}
       {mobileMenuOpen && (
         <div className="lg:hidden border-t">

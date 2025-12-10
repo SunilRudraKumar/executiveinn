@@ -27,6 +27,8 @@ export function BookingWidget({ className }: BookingWidgetProps) {
   const navigate = useNavigate();
   const [checkIn, setCheckIn] = useState<Date>();
   const [checkOut, setCheckOut] = useState<Date>();
+  const [isCheckInOpen, setIsCheckInOpen] = useState(false);
+  const [isCheckOutOpen, setIsCheckOutOpen] = useState(false);
   const [adults, setAdults] = useState<string>("2");
   const [children, setChildren] = useState<string>("0");
 
@@ -57,7 +59,7 @@ export function BookingWidget({ className }: BookingWidgetProps) {
         {/* Check-in Date */}
         <div className="space-y-2">
           <Label htmlFor="checkin">Check-in</Label>
-          <Popover>
+          <Popover open={isCheckInOpen} onOpenChange={setIsCheckInOpen}>
             <PopoverTrigger asChild>
               <Button
                 id="checkin"
@@ -75,7 +77,10 @@ export function BookingWidget({ className }: BookingWidgetProps) {
               <Calendar
                 mode="single"
                 selected={checkIn}
-                onSelect={setCheckIn}
+                onSelect={(date) => {
+                  setCheckIn(date);
+                  setIsCheckInOpen(false);
+                }}
                 disabled={(date) => date < new Date()}
                 initialFocus
                 className="pointer-events-auto"
@@ -87,7 +92,7 @@ export function BookingWidget({ className }: BookingWidgetProps) {
         {/* Check-out Date */}
         <div className="space-y-2">
           <Label htmlFor="checkout">Check-out</Label>
-          <Popover>
+          <Popover open={isCheckOutOpen} onOpenChange={setIsCheckOutOpen}>
             <PopoverTrigger asChild>
               <Button
                 id="checkout"
@@ -105,7 +110,10 @@ export function BookingWidget({ className }: BookingWidgetProps) {
               <Calendar
                 mode="single"
                 selected={checkOut}
-                onSelect={setCheckOut}
+                onSelect={(date) => {
+                  setCheckOut(date);
+                  setIsCheckOutOpen(false);
+                }}
                 disabled={(date) => !checkIn || date <= checkIn}
                 initialFocus
                 className="pointer-events-auto"

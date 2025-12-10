@@ -11,15 +11,30 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { getRoomTypes, getRoomTypeByCode, calculateStayCost, RoomType } from "@/lib/roomUtils";
 import { Calendar } from "@/components/ui/calendar";
 import { format, differenceInDays } from "date-fns";
-import { Check, ChevronRight } from "lucide-react";
+import { Check, ChevronRight, Calendar as CalendarIcon, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+import { supabase, isSupabaseConfigured } from "@/lib/supabaseClient";
 
 const Book = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
-  
+  const [isProcessing, setIsProcessing] = useState(false);
+
   // Parse URL params
   const urlCheckIn = searchParams.get("checkIn");
   const urlCheckOut = searchParams.get("checkOut");
@@ -37,6 +52,11 @@ const Book = () => {
   const [selectedRoomType, setSelectedRoomType] = useState<RoomType | undefined>(
     urlRoomType ? getRoomTypeByCode(urlRoomType.toUpperCase()) : undefined
   );
+
+  const [isCheckInOpen, setIsCheckInOpen] = useState(false);
+  const [isCheckOutOpen, setIsCheckOutOpen] = useState(false);
+  const [adults, setAdults] = useState<string>(urlAdults);
+  const [children, setChildren] = useState<string>(urlChildren);
   const [guestInfo, setGuestInfo] = useState({
     firstName: "",
     lastName: "",
@@ -50,6 +70,12 @@ const Book = () => {
   const cost = selectedRoomType && nights > 0 ? calculateStayCost(selectedRoomType, nights) : null;
 
   const handleRoomSelect = (roomType: RoomType) => {
+    if (!checkIn || !checkOut) {
+      toast.error("Please select check-in and check-out dates first");
+      // Scroll to top to show the date picker if needed
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
     setSelectedRoomType(roomType);
     setStep(2);
   };
@@ -63,9 +89,44 @@ const Book = () => {
     setStep(3);
   };
 
-  const handleConfirm = () => {
-    const confirmationNumber = `EI${Date.now().toString().slice(-8)}`;
-    navigate(`/thank-you?confirmation=${confirmationNumber}`);
+  const handleConfirm = async () => {
+    setIsProcessing(true);
+
+    try {
+      // Use direct fetch to bypass potential Auth/Header issues with the Supabase client
+      // The function is deployed with --no-verify-jwt (public)
+      const functionUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-booking-notification`;
+
+      const response = await fetch(functionUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // We intentionally do NOT send authorization header since the key might be invalid for JWT check
+        },
+        body: JSON.stringify({
+          guest: guestInfo,
+          roomType: selectedRoomType,
+          dates: {
+            checkIn: checkIn ? format(checkIn, 'yyyy-MM-dd') : null,
+            checkOut: checkOut ? format(checkOut, 'yyyy-MM-dd') : null
+          },
+          cost
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to send notification");
+      }
+
+      navigate(`/thank-you?confirmation=${data.confirmationNumber}`);
+    } catch (error: any) {
+      console.error("Booking Error:", error);
+      toast.error(error.message || "Failed to process reservation. Please try again.");
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (
@@ -117,6 +178,112 @@ const Book = () => {
               <div className="lg:col-span-2">
                 {step === 1 && (
                   <div className="space-y-6">
+                    {/* Date & Guest Selection */}
+                    <div className="bg-card p-6 rounded-2xl border shadow-sm">
+                      <h2 className="text-xl font-serif font-semibold mb-4">Select Dates & Guests</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        {/* Check-in Date */}
+                        <div className="space-y-2">
+                          <Label htmlFor="checkin">Check-in</Label>
+                          <Popover open={isCheckInOpen} onOpenChange={setIsCheckInOpen}>
+                            <PopoverTrigger asChild>
+                              <Button
+                                id="checkin"
+                                variant="outline"
+                                className={cn(
+                                  "w-full justify-start text-left font-normal",
+                                  !checkIn && "text-muted-foreground"
+                                )}
+                              >
+                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                {checkIn ? format(checkIn, "PPP") : "Select date"}
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0" align="start">
+                              <Calendar
+                                mode="single"
+                                selected={checkIn}
+                                onSelect={(date) => {
+                                  setCheckIn(date);
+                                  setIsCheckInOpen(false);
+                                }}
+                                disabled={(date) => date < new Date()}
+                                initialFocus
+                              />
+                            </PopoverContent>
+                          </Popover>
+                        </div>
+
+                        {/* Check-out Date */}
+                        <div className="space-y-2">
+                          <Label htmlFor="checkout">Check-out</Label>
+                          <Popover open={isCheckOutOpen} onOpenChange={setIsCheckOutOpen}>
+                            <PopoverTrigger asChild>
+                              <Button
+                                id="checkout"
+                                variant="outline"
+                                className={cn(
+                                  "w-full justify-start text-left font-normal",
+                                  !checkOut && "text-muted-foreground"
+                                )}
+                              >
+                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                {checkOut ? format(checkOut, "PPP") : "Select date"}
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0" align="start">
+                              <Calendar
+                                mode="single"
+                                selected={checkOut}
+                                onSelect={(date) => {
+                                  setCheckOut(date);
+                                  setIsCheckOutOpen(false);
+                                }}
+                                disabled={(date) => !checkIn || date <= checkIn}
+                                initialFocus
+                              />
+                            </PopoverContent>
+                          </Popover>
+                        </div>
+
+                        {/* Guests (Adults) */}
+                        <div className="space-y-2">
+                          <Label htmlFor="adults">Adults</Label>
+                          <Select value={adults} onValueChange={setAdults}>
+                            <SelectTrigger id="adults">
+                              <Users className="mr-2 h-4 w-4" />
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {[1, 2, 3, 4].map((num) => (
+                                <SelectItem key={num} value={num.toString()}>
+                                  {num} {num === 1 ? "Adult" : "Adults"}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        {/* Guests (Children) */}
+                        <div className="space-y-2">
+                          <Label htmlFor="children">Children</Label>
+                          <Select value={children} onValueChange={setChildren}>
+                            <SelectTrigger id="children">
+                              <Users className="mr-2 h-4 w-4" />
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {[0, 1, 2, 3, 4].map((num) => (
+                                <SelectItem key={num} value={num.toString()}>
+                                  {num} {num === 1 ? "Child" : "Children"}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    </div>
+
                     <div className="bg-card p-6 rounded-2xl border">
                       <h2 className="text-2xl font-serif font-bold mb-6">Choose Your Room Type</h2>
                       <div className="space-y-4">
@@ -302,9 +469,10 @@ const Book = () => {
                         </Button>
                         <Button
                           onClick={handleConfirm}
+                          disabled={isProcessing}
                           className="flex-1 bg-accent text-accent-foreground hover:bg-accent/90"
                         >
-                          Confirm Reservation
+                          {isProcessing ? "Processing..." : "Confirm Reservation"}
                         </Button>
                       </div>
                     </div>
@@ -324,7 +492,7 @@ const Book = () => {
                           <p className="text-sm text-muted-foreground">Room Type</p>
                           <p className="font-medium">{selectedRoomType.name}</p>
                         </div>
-                        
+
                         {checkIn && checkOut && (
                           <>
                             <div>

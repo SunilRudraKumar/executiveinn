@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { MapPin, Phone, Mail } from "lucide-react";
+import { HOTEL_EMAIL, HOTEL_PHONE_DISPLAY, HOTEL_PHONE_E164 } from "@/lib/constants";
 
 export function Footer() {
   return (
@@ -10,7 +11,7 @@ export function Footer() {
           <div>
             <h3 className="text-xl font-serif font-bold mb-4">Executive Inn</h3>
             <p className="text-sm text-primary-foreground/80 mb-4">
-              Clean, comfortable rooms at a great value in Locust Grove, Georgia. 
+              Clean, comfortable rooms at a great value in Locust Grove, Georgia.
               Your home away from home with exceptional hospitality.
             </p>
           </div>
@@ -50,14 +51,14 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="h-4 w-4 flex-shrink-0" />
-                <a href="tel:+17709579995" className="hover:text-accent transition-colors">
-                  (770) 957-9995
+                <a href={`tel:${HOTEL_PHONE_E164}`} className="hover:text-accent transition-colors">
+                  {HOTEL_PHONE_DISPLAY}
                 </a>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4 flex-shrink-0" />
-                <a href="mailto:info@executiveinn.com" className="hover:text-accent transition-colors">
-                  info@executiveinn.com
+                <a href={`mailto:${HOTEL_EMAIL}`} className="hover:text-accent transition-colors">
+                  {HOTEL_EMAIL}
                 </a>
               </div>
             </address>

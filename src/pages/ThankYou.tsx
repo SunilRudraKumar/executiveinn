@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, MapPin, Phone, Mail } from "lucide-react";
+import { HOTEL_EMAIL, HOTEL_PHONE_DISPLAY, HOTEL_PHONE_E164 } from "@/lib/constants";
 
 const ThankYou = () => {
   const [searchParams] = useSearchParams();
@@ -30,7 +31,7 @@ const ThankYou = () => {
               <h1 className="text-3xl lg:text-4xl font-serif font-bold mb-4">
                 Reservation Confirmed!
               </h1>
-              
+
               <p className="text-lg text-muted-foreground mb-8">
                 Thank you for choosing Executive Inn. We're excited to welcome you to Locust Grove!
               </p>
@@ -85,14 +86,14 @@ const ThankYou = () => {
                     </div>
                     <div className="flex items-center gap-3">
                       <Phone className="h-5 w-5 text-accent flex-shrink-0" />
-                      <a href="tel:+17709579995" className="text-sm hover:text-accent transition-colors">
-                        (770) 957-9995
+                      <a href={`tel:${HOTEL_PHONE_E164}`} className="text-sm hover:text-accent transition-colors">
+                        {HOTEL_PHONE_DISPLAY}
                       </a>
                     </div>
                     <div className="flex items-center gap-3">
                       <Mail className="h-5 w-5 text-accent flex-shrink-0" />
-                      <a href="mailto:info@executiveinn.com" className="text-sm hover:text-accent transition-colors">
-                        info@executiveinn.com
+                      <a href={`mailto:${HOTEL_EMAIL}`} className="text-sm hover:text-accent transition-colors">
+                        {HOTEL_EMAIL}
                       </a>
                     </div>
                   </div>
